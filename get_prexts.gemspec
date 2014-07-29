@@ -1,15 +1,15 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'get_prexts/version'
+require 'get_prexts/version' 
 
 Gem::Specification.new do |spec|
   spec.name          = "get_prexts"
   spec.version       = GetPrexts::VERSION
   spec.authors       = ["tfunato"]
-  spec.email         = ["tfunato@healthcare.ne.jp"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.email         = ["tfunato@gmail.com"]
+  spec.summary       = %q{Ingress COMM API caller.}
+  spec.description   = %q{Ingress COMM API caller.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
