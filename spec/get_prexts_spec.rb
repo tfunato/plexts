@@ -1,6 +1,5 @@
 require 'spec_helper'
 
 describe GetPrexts do
-  GetPrexts.getPrexts
-  #p GetPrexts.headers
+  GetPrexts.to_console(GetPrexts.get_prexts)
 end

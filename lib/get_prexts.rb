@@ -1,12 +1,15 @@
 require 'net/http'
 require 'net/https'
 require 'json'
-require 'yaml'
+require 'pit'
 
 module GetPrexts
 
-    def self.getPrexts
-        @config = YAML.load_file('settings.yml') 
+    def self.get_prexts
+        @config = Pit.get("ingress")
+        if @config["csrftoken"] == nil
+            raise "need pit settings."
+        end
 
         uri = URI('https://www.ingress.com/r/getPlexts')
         https = Net::HTTP.new(uri.host,uri.port)
@@ -18,12 +21,52 @@ module GetPrexts
         # puts "Response #{res.code} #{res.message}: #{res.body}"
 
         json = JSON.parse(res.body)
-        #p JSON.pretty_generate(json)
-        json["success"].each do |prext| 
+        # p JSON.pretty_generate(json)
+    end
+
+    def self.to_console(json)
+        json["success"].reverse.each do |prext| 
             s = prext[1].to_s
             s = s[0, s.length - 3] 
-            puts Time.at(s.to_i)
-            puts prext[2]["plext"]["text"]
+
+            print Time.at(s.to_i).strftime("%Y-%m-%d %R | ")
+
+            text = ""
+
+            prext[2]["plext"]["markup"].each do |markups|
+                if markups[0] == "PLAYER"
+                    if markups[1]["team"] == "RESISTANCE"
+                        text << TermColor.blue
+                    elsif markups[1]["team"] == "ENLIGHTENED"
+                        text << TermColor.green
+                    end
+                    text << markups[1]["plain"]
+                    text << TermColor.reset
+                elsif markups[0] == "PORTAL" 
+                    if markups[1]["team"] == "RESISTANCE"
+                        text << TermColor.blue
+                    else
+                        text << TermColor.green
+                    end
+                    text << markups[1]["name"]
+                    text << TermColor.reset
+                elsif markups[0] == "TEXT" 
+                    if prext[2]["plext"]["categories"] == 4
+                        text << TermColor.red
+                        text << markups[1]["plain"]
+                        text << TermColor.reset
+                    else
+                        text << markups[1]["plain"]
+                    end
+                elsif markups[0] == "SECURE" 
+                    text << markups[1]["plain"]
+                elsif markups[0] == "SENDER" 
+                    text << TermColor.blue
+                    text << markups[1]["plain"]
+                    text << TermColor.reset
+                end
+            end
+            puts text
         end
     end
 
@@ -35,12 +78,12 @@ module GetPrexts
             'ingress.intelmap.lat' => '35.574955',
             'ingress.intelmap.lng' => '139.623564',
             'ingress.intelmap.zoom' => '16',
-            'SACSID' => 'AJKiYcGMK-lE3C6uLmPJNEG634p0ZETjgp40hRpuaY0MGNOEdqy-bCfJOUh5y9u2PMrNuNMey4I4NqFXWIDSuyFKwD0tRcqcRqwA_dPMj2xhel37Y1iH_KC4J6hIsZghQ1VNUK4qn3Z7H1WYFtI3mTzCLEFCWv7BToxa9sMWuvUjtya1ZMSp5Edz8Gg10-Jwy6XntiSXhkVMNDv-obH8IxEaZ4bDkPNBeM0hQJiiKRnTRPm2Q5unsm8ryBOV73PuFx_PFplVTwe4HMquM5Isoq8FHZ4I2RTebm4S-yYu6ik_KqZgJ0VW7Hv3rZw-PMqVggdFg3ELInztGvyU4uIDM8dnR_sc5ppatRfjuJtLVPV1ouSI8eQT0Lhyv37UQPGIXedWAwkqMdKejs_hHuL0aJoCsp2ngu1Y6obe6JRA74hR9n-74XjhTuSvbWpDgY0DKwgQlgvEWBCzIjRIUBbLlG4tYbntMldGs8hj73yLyH8TSpcNGzpitxZ7xdNlwq3604P18g0i4onw0S7xRwCBfWdPqs4jxzdkRoUtEDnlimZYGG1qHmWu0rGRbtrSdf91ITiu6CtLk5ahRL1oPQEYg3VC7XajZR1N60VoZW-wkoBppHNx17eMOyA'
+            'SACSID' => @config['SACSID']
         }
         initheaders = {
             'content-Type' => 'application/json; charset=UTF-8',
             'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
-            'x-csrftoken' => 'xtzBPR7tlTzqlHQqhPZf0iiwlhpM6m1J',
+            'x-csrftoken' => @config['csrftoken'],
             'referer' => 'https://www.ingress.com/intel',
             'cookie' => cookie.map{|k,v|
                             "#{k}=#{v}"
@@ -50,14 +93,33 @@ module GetPrexts
 
     def self.params
         toSend = {
-            "minLatE6" => 35569894,
-            "minLngE6" => 139610872,
-            "maxLatE6" => 35580016,
-            "maxLngE6" => 139636256,
-            "minTimestampMs" => -1,
-            "maxTimestampMs" => -1,
-            "tab" => "all",
-            "v" => "39bcf52fb8e9da4f4161219bc0e650642ac20f9d"
+            "minLatE6" => @config["minLatE6"],
+            "minLngE6" => @config["minLngE6"],
+            "maxLatE6" => @config["maxLatE6"],
+            "maxLngE6" => @config["maxLngE6"],
+            "minTimestampMs" => @config["minTimestampMs"],
+            "tab" => @config["tab"],
+            "v" => @config["v"]
         }.to_json
+    end
+    class TermColor
+      class << self
+        # 色を解除
+        def reset   ; c 0 ; end 
+
+        # 各色
+        def red     ; c 31; end 
+        def green   ; c 32; end 
+        def yellow  ; c 33; end 
+        def blue    ; c 34; end 
+        def magenta ; c 35; end 
+        def cyan    ; c 36; end 
+        def white   ; c 37; end
+
+        # カラーシーケンスを出力する
+        def c(num)
+          "\e[#{num.to_s}m"
+        end 
+      end 
     end
 end
