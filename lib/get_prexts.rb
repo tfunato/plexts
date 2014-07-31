@@ -50,6 +50,9 @@ module GetPrexts
                     end
                     text << markups[1]["name"]
                     text << TermColor.reset
+                    lat = markups[1]["latE6"]  / 1e6
+                    lag = markups[1]["lngE6"]  / 1e6
+                    text << " https://www.ingress.com/intel?ll=" + lat.to_s + "," + lag.to_s + "&z=16&pll=" + lat.to_s + "," + lag.to_s
                 elsif markups[0] == "TEXT" 
                     if prext[2]["plext"]["categories"] == 4
                         text << TermColor.red
