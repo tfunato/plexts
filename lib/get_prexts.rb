@@ -75,9 +75,9 @@ module GetPrexts
             'GOOGAPPUID' => '262',
             'csrftoken' => @config["csrftoken"],
             'ingress.intelmap.shflt' => 'viz',
-            'ingress.intelmap.lat' => '35.574955',
-            'ingress.intelmap.lng' => '139.623564',
-            'ingress.intelmap.zoom' => '16',
+            'ingress.intelmap.lat' => @config["ingress.intelmap.lat"],
+            'ingress.intelmap.lng' => @config["ingress.intelmap.lng"],
+            'ingress.intelmap.zoom' => @config["ingress.intelmap.zoom"],
             'SACSID' => @config['SACSID']
         }
         initheaders = {
