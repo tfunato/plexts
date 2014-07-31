@@ -21,7 +21,7 @@ module GetPrexts
         # puts "Response #{res.code} #{res.message}: #{res.body}"
 
         json = JSON.parse(res.body)
-        # p JSON.pretty_generate(json)
+        # puts JSON.pretty_generate(json)
     end
 
     def self.to_console(json)
