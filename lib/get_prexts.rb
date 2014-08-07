@@ -2,6 +2,7 @@ require 'net/http'
 require 'net/https'
 require 'json'
 require 'pit'
+require 'pstore'
 
 module GetPrexts
 
@@ -17,15 +18,45 @@ module GetPrexts
         req = Net::HTTP::Post.new(uri.path, headers )
         req.body = params
         res = https.request(req)
-
         # puts "Response #{res.code} #{res.message}: #{res.body}"
 
         json = JSON.parse(res.body)
         # puts JSON.pretty_generate(json)
     end
 
-    def self.to_console(json)
-        json["success"].reverse.each do |prext| 
+    def self.attack_notification
+
+        @config = Pit.get("ingress")
+
+        if @config["csrftoken"] == nil
+            raise "need pit settings."
+        end
+        @config['tab'] = 'alerts'
+        json = get_prexts
+        #puts JSON.pretty_generate(json)
+        db = PStore.new('/tmp/ingress_check')
+        db.transaction do
+            if !db['alerts_ids'] 
+                db['alerts_ids'] = Array.new()
+            end
+            ids = db['alerts_ids'] 
+            json["success"].each do |prext| 
+                id = prext[0]
+                if !ids.include?(id)
+                    msg = prext[2]['plext']["text"]
+                    cmd = "growlnotify -t 'ingress' -m '" + msg + "'"
+                    system(cmd)
+                    ids.push(id) 
+                end
+            end
+        end
+    end
+
+    def self.to_console()
+
+        json = get_prexts
+
+        json["success"].reverse!.each do |prext| 
             s = prext[1].to_s
             s = s[0, s.length - 3] 
 
@@ -52,7 +83,7 @@ module GetPrexts
                     text << TermColor.reset
                     lat = markups[1]["latE6"]  / 1e6
                     lag = markups[1]["lngE6"]  / 1e6
-                    text << " https://www.ingress.com/intel?ll=" + lat.to_s + "," + lag.to_s + "&z=16&pll=" + lat.to_s + "," + lag.to_s
+                    text << " https://www.ingress.com/intel?ll=" + lat.to_s + "," + lag.to_s + "&z=13&pll=" + lat.to_s + "," + lag.to_s
                 elsif markups[0] == "TEXT" 
                     if prext[2]["plext"]["categories"] == 4
                         text << TermColor.red
@@ -77,10 +108,6 @@ module GetPrexts
         cookie = {
             'GOOGAPPUID' => '262',
             'csrftoken' => @config["csrftoken"],
-            'ingress.intelmap.shflt' => 'viz',
-            'ingress.intelmap.lat' => @config["ingress.intelmap.lat"],
-            'ingress.intelmap.lng' => @config["ingress.intelmap.lng"],
-            'ingress.intelmap.zoom' => @config["ingress.intelmap.zoom"],
             'SACSID' => @config['SACSID']
         }
         initheaders = {
