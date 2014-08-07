@@ -1,6 +1,6 @@
 require 'pit'
 
-module GetPrexts
+module Plexts
     def self.configure
         @config = Pit.get("ingress")
         if @config["csrftoken"] == nil
@@ -25,7 +25,7 @@ module GetPrexts
         }
     end
 
-    def self.prexts_params
+    def self.plexts_params
         toSend = {
             "minLatE6" => @config["minLatE6"],
             "minLngE6" => @config["minLngE6"],

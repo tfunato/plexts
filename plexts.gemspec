@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'get_prexts/version' 
+require 'plexts/version' 
 
 Gem::Specification.new do |spec|
-  spec.name          = "get_prexts"
-  spec.version       = GetPrexts::VERSION
+  spec.name          = "plexts"
+  spec.version       = Plexts::VERSION
   spec.authors       = ["tfunato"]
   spec.email         = ["tfunato@gmail.com"]
   spec.summary       = %q{Ingress COMM API caller.}
