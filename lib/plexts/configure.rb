@@ -36,4 +36,10 @@ module Plexts
             "v" => @config["v"]
         }.to_json
     end
+
+    def self.artifacts_params
+        toSend = {
+            "v" => @config["v"]
+        }.to_json
+    end
 end
