@@ -4,7 +4,6 @@ module GetPrexts
     def self.to_console()
 
         json = get_prexts
-
         json["success"].reverse!.each do |prext| 
             s = prext[1].to_s
             s = s[0, s.length - 3] 
