@@ -42,4 +42,10 @@ module Plexts
             "v" => @config["v"]
         }.to_json
     end
+    def self.entities_params
+        toSend = {
+            "tileKeys" => [get_mercator_tile( @config['entities_lat'], @config['entities_lng'], @config['entities_zoom'])],
+            "v" => @config["v"]
+        }.to_json
+    end
 end
