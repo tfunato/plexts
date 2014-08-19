@@ -12,6 +12,9 @@ module Plexts
         req = Net::HTTP::Post.new(uri.path, headers )
         req.body = artifacts_params
         res = https.request(req)
+        if !res.kind_of? Net::HTTPSuccess
+            raise res.code + ":" + res.msg
+        end
         # puts "Response #{res.code} #{res.message}: #{res.body}"
         json = JSON.parse(res.body)
         puts JSON.pretty_generate(json)

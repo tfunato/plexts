@@ -6,14 +6,17 @@ module Plexts
 
     ZOOM_TO_NUM_TILES_PER_EDGE = [64, 64, 64, 64, 256, 256, 256, 1024, 1024, 1536, 4096, 4096, 6500, 6500, 6500]
 
-    def self.get_entities
+    def self.get_entities(lat, lng, zoom=20)
         configure
         uri = URI('https://www.ingress.com/r/getEntities')
         https = Net::HTTP.new(uri.host,uri.port)
         https.use_ssl = true
         req = Net::HTTP::Post.new(uri.path, headers )
-        req.body = entities_params
+        req.body = entities_params(lat, lng, zoom)
         res = https.request(req)
+        if !res.kind_of? Net::HTTPSuccess
+            raise res.code + ":" + res.msg
+        end
         # puts "Response #{res.code} #{res.message}: #{res.body}"
         json = JSON.parse(res.body)
         puts JSON.pretty_generate(json)

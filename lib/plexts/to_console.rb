@@ -29,7 +29,7 @@ module Plexts
                     text << TermColor.reset
                     lat = markups[1]["latE6"]  / 1e6
                     lag = markups[1]["lngE6"]  / 1e6
-                    text << " https://www.ingress.com/intel?ll=" + lat.to_s + "," + lag.to_s + "&z=13&pll=" + lat.to_s + "," + lag.to_s
+                    text << " https://www.ingress.com/intel?ll=" + lat.to_s + "," + lag.to_s + "&z=19&pll=" + lat.to_s + "," + lag.to_s
                 elsif markups[0] == "TEXT" 
                     if plext[2]["plext"]["categories"] == 4
                         text << TermColor.red
