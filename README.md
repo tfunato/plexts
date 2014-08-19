@@ -1,29 +1,36 @@
 # Plexts
 
-TODO: Write a gem description
+## 説明
+ruby gem形式で書いてあります。
 
-## Installation
+gemを使ったアプリを書くのが面倒なので、rspecで実行するようになってますｗ
 
-Add this line to your application's Gemfile:
+解凍したディレクトリで
 
-    gem 'plexts'
+    $ rspec
 
-And then execute:
+でspec/plexts_spec.rbがキックされて実行します。
 
-    $ bundle
+## 設定
 
-Or install it yourself as:
+Pitを使ってます
 
-    $ gem install plexts
+https://github.com/cho45/pit
 
-## Usage
+Pitの設定項目
 
-TODO: Write usage instructions here
 
-## Contributing
+    ingress:
+      # Requestパラメータ、ChromeなどのDeveloperToolsなどでリクエストを覗いてください。。。
+      maxLatE6: 
+      maxLngE6: 
+      minLatE6: 
+      minLngE6: 
+      maxTimestampMs: -1
+      minTimestampMs: -1
+      tab: "all" # タブの種類 all, faction, alerts
+      v: "85c5f3500d547f7c4f7165df96d739dcfa496987" # Intelマップのバージョン
+      # Cookieデータ
+      csrftoken: # CSRFのトークン
+      SACSID:  # 認証情報（取り扱い注意!）
 
-1. Fork it ( http://github.com/tfunato/plexts/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
