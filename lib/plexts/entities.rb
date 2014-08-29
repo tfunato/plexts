@@ -7,6 +7,9 @@ module Plexts
     ZOOM_TO_NUM_TILES_PER_EDGE = [64, 64, 64, 64, 256, 256, 256, 1024, 1024, 1536, 4096, 4096, 6500, 6500, 6500]
 
     def self.get_entities(lat, lng, zoom=20)
+        if !(lat.between?(-90, 90) && lng.between?(-180, 180))
+            raise StandardError, "経緯度が範囲外"
+        end
         configure
         uri = URI('https://www.ingress.com/r/getEntities')
         https = Net::HTTP.new(uri.host,uri.port)
