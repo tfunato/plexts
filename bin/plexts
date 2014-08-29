@@ -4,21 +4,28 @@
 require "plexts"
 require 'optparse'
 
+Version = Plexts::VERSION
+
 def cmd_line
-  args = {}
-  OptionParser.new do |parser|
-    parser.on('-c', '--console', 'コンソール') {|v| args[:c] = v}
-    parser.on('-e', '--entity', 'Portal') {|v| args[:e] = v}
-    parser.on('--lat VALUE', 'Latitude（緯度）') {|v| args[:lat] = v}
-    parser.on('--lng VALUE', 'Longitude（経度）') {|v| args[:lng] = v}
-    parser.on('-z VALUE', '地図の拡大サイズ 1-20') {|v| args[:z] = v}
-    parser.on('-a', '--artifacts', 'Artifacts') {|v| args[:a] = v}
-    parser.parse!(ARGV)
-  end 
-  args
+    args = {}
+    opts = OptionParser.new do |parser|
+      parser.on('-c', '--console', 'コンソールにall, faction, aleartを表示') {|v| args[:c] = v}
+      parser.on('-e', '--entity', 'Portal') {|v| args[:e] = v}
+      parser.on('--lat VALUE', 'Latitude（緯度）') {|v| args[:lat] = v}
+      parser.on('--lng VALUE', 'Longitude（経度）') {|v| args[:lng] = v}
+      parser.on('-z VALUE', '地図の拡大サイズ 1-20') {|v| args[:z] = v}
+      parser.on('-a', '--artifacts', 'Artifacts') {|v| args[:a] = v}
+      parser.parse!(ARGV)
+    end 
+    if args.size() == 0
+        puts opts
+        exit
+    end
+    args
 end
 
 args = cmd_line
+
 
 if args[:c]
     Plexts.to_console
@@ -28,5 +35,6 @@ elsif args[:e]
     else
         Plexts.get_entities(args[:lat].to_f, args[:lng].to_f)
     end
+elsif args[:a]
+    Plexts.get_artifacts()
 end
-#Plexts.to_console
