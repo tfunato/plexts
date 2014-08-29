@@ -16,6 +16,7 @@ https://github.com/cho45/pit
 
 * Pit Settings
 
+```
     ingress:
       # IntelMap request parameters
       maxLatE6: 
@@ -29,6 +30,7 @@ https://github.com/cho45/pit
       # Cookie
       csrftoken: # CSRF token
       SACSID:  # Authentication information(HANDLING WARNING)
+```
 
 ## Using CLI
 
