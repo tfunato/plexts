@@ -9,12 +9,12 @@ Version = Plexts::VERSION
 def cmd_line
     args = {}
     opts = OptionParser.new do |parser|
-      parser.on('-c', '--console', 'コンソールにall, faction, aleartを表示') {|v| args[:c] = v}
-      parser.on('-e', '--entity', 'Portal') {|v| args[:e] = v}
-      parser.on('--lat VALUE', 'Latitude（緯度）') {|v| args[:lat] = v}
-      parser.on('--lng VALUE', 'Longitude（経度）') {|v| args[:lng] = v}
-      parser.on('-z VALUE', '地図の拡大サイズ 1-20') {|v| args[:z] = v}
-      parser.on('-a', '--artifacts', 'Artifacts') {|v| args[:a] = v}
+      parser.on('-c', '--console', 'show all or faction, aleart messages') {|v| args[:c] = v}
+      parser.on('-e', '--entity', 'show portals infomation of JSON format') {|v| args[:e] = v}
+      parser.on('--lat VALUE', 'portal Latitude') {|v| args[:lat] = v}
+      parser.on('--lng VALUE', 'portal Longitude') {|v| args[:lng] = v}
+      parser.on('-z VALUE', 'map zoom level 1-20') {|v| args[:z] = v}
+      parser.on('-a', '--artifacts', 'artifacts infomation of JSON format') {|v| args[:a] = v}
       parser.parse!(ARGV)
     end 
     if args.size() == 0
