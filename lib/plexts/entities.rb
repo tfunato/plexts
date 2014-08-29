@@ -8,7 +8,7 @@ module Plexts
 
     def self.get_entities(lat, lng, zoom=20)
         if !(lat.between?(-90, 90) && lng.between?(-180, 180))
-            raise StandardError, "経緯度が範囲外"
+            raise StandardError, "irregular parameter"
         end
         configure
         uri = URI('https://www.ingress.com/r/getEntities')
@@ -25,14 +25,14 @@ module Plexts
         puts JSON.pretty_generate(json)
     end
 
-    # パラメータ例
+    # parameter sample
     # 17_7994_3544_0_8_100
-    # 17: ズームレベル
-    # 7994: メルカトルタイルのlng値
-    # 3544: メルカトルタイルのlat値
-    # 0: 最小ポータルレベル(0 - 8)
-    # 8: 最大ポータルレベル(0 - 8)
-    # 100: 最大ポータルヘルス(25, 50, 75, 100)
+    # 17: zoom level
+    # 7994: mercator tile lan param
+    # 3544: mercator tile lng param
+    # 0: min portal level(0-8)
+    # 8: max portal level(0-8)
+    # 100: max portal health (25, 50, 75, 100)
     def self.get_mercator_tile(lat, lng ,zoom=17, pMinLevel=0, pMaxLevel=8, maxHealth=100)
         z = ZOOM_TO_NUM_TILES_PER_EDGE[zoom] || 9000
         lg = ((lng + 180) / 360 * z).to_i
