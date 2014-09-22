@@ -10,7 +10,7 @@ module Plexts
 
     def self.headers
         cookie = {
-            'GOOGAPPUID' => '262',
+            'GOOGAPPUID' => '499',
             'csrftoken' => @config["csrftoken"],
             'SACSID' => @config['SACSID']
         }
