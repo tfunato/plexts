@@ -24,11 +24,11 @@ module Plexts
 
     def self.plexts_params
         toSend = {
-            "minLatE6" => ENV["MIN_LAT_E6"],
-            "minLngE6" => ENV["MIN_LNG_E6"],
-            "maxLatE6" => ENV["MAX_LAT_E6"],
-            "maxLngE6" => ENV["MAX_LNG_E6"],
-            "minTimestampMs" => ENV["MIN_TIMESTAMP_MS"],
+            "minLatE6" => ENV["MIN_LAT_E6"].to_i,
+            "minLngE6" => ENV["MIN_LNG_E6"].to_i,
+            "maxLatE6" => ENV["MAX_LAT_E6"].to_i,
+            "maxLngE6" => ENV["MAX_LNG_E6"].to_i,
+            "minTimestampMs" => ENV["MIN_TIMESTAMP_MS"].to_i,
             "tab" => ENV["TAB"],
             "v" => ENV["VERSION"]
         }.to_json
